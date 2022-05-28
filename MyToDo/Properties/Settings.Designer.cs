@@ -25,7 +25,7 @@ namespace MyToDo.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0483;374B")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1A86;7523")]
         public string DeviceID {
             get {
                 return ((string)(this["DeviceID"]));

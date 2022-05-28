@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="DeviceID" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0483;374B</Value>
+      <Value Profile="(Default)">1A86;7523</Value>
     </Setting>
     <Setting Name="ExitorHide" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

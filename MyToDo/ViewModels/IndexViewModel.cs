@@ -476,6 +476,7 @@ namespace MyToDo.ViewModels
                     AppSession.APPHR = TaskBars[0].Content;
                     AppSession.APPTemp = TaskBars[1].Content;
                     AppSession.APPSPO2 = TaskBars[2].Content;
+                     _trend = "--";
                 }
                 else//step3：如果连接到，则做。。。。
                 {
@@ -554,20 +555,34 @@ namespace MyToDo.ViewModels
                                     {
 
                                     };
-                                    for(int i = 0; i< 3200;i++)
+                                    int uselessdata = 0;
+                                    for (int i = 0; i< 3200;i++)
                                     {
                                         String IDString = _serialPort.ReadLine();
                                         string[] ppgstring = IDString.Split(':');
-                                        if(ppgstring[0] == "ID")
+                                        
+                                        if (ppgstring[0] == "ID")
                                         {
                                             string[] Channels = ppgstring[1].Split(',');
                                             string id = Channels[0];
+                                            
                                             PPG ppg = new PPG();
                                             ppg.channel1 = long.Parse(Channels[1]);
                                             ppg.channel2 = long.Parse(Channels[2]);
                                             ppg.channel3 = long.Parse(Channels[3]);
-                                            if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 50000 || ppg.channel2 < 50000 || ppg.channel3 < 50000)
+                                            if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 20000 || ppg.channel2 < 20000 || ppg.channel3 < 20000)
                                             {
+                                                uselessdata = uselessdata +1;
+                                                if( uselessdata > 50 )
+                                                {
+                                                    TaskBars[0].Content = "--";
+                                                    TaskBars[1].Content = "--";
+                                                    TaskBars[2].Content = "--";
+                                                    AppSession.APPHR = TaskBars[0].Content;
+                                                    AppSession.APPTemp = TaskBars[1].Content;
+                                                    AppSession.APPSPO2 = TaskBars[2].Content;
+                                                    _trend = "--";
+                                                }
                                                 continue;
                                             }
                                             records.Add(ppg);
@@ -579,35 +594,32 @@ namespace MyToDo.ViewModels
                                             if (Hand_temp > 10)
                                             {
                                                 Hand_temp = 0.0086 * (Hand_temp - 28.3) + 36.58;
-                                                ps.hand_temp = (Hand_temp).ToString("0.0");
+                                                ps.hand_temp = (Hand_temp).ToString("0.00");
                                             }
                                             else
                                                 ps.hand_temp = "--";
-
                                                 Temp = true;
                                         }
-                                        else if (ppgstring[0] == "HR")
-                                        {
-                                            //if ((float.Parse(ppgstring[1]) / 10) < 30)
-                                            //    ps.hr = "--";
-                                            //else
-                                            //    ps.hr = (float.Parse(ppgstring[1]) / 10).ToString();
-                                            //HR = true;
-                                        }
-                                        else if (ppgstring[0] == "SPO2")
-                                        {
-                                            //if ((float.Parse(ppgstring[1]) / 10) > 30)
-                                            //{
-                                            //    ps.spo2 = (float.Parse(ppgstring[1]) / 10).ToString();
-                                            //}
-                                            //else
-                                            //    ps.spo2 = "--";
+                                        //else if (ppgstring[0] == "HR")
+                                        //{
+                                        //    //if ((float.Parse(ppgstring[1]) / 10) < 30)
+                                        //    //    ps.hr = "--";
+                                        //    //else
+                                        //    //    ps.hr = (float.Parse(ppgstring[1]) / 10).ToString();
+                                        //    //HR = true;
+                                        //}
+                                        //else if (ppgstring[0] == "SPO2")
+                                        //{
+                                        //    //if ((float.Parse(ppgstring[1]) / 10) > 30)
+                                        //    //{
+                                        //    //    ps.spo2 = (float.Parse(ppgstring[1]) / 10).ToString();
+                                        //    //}
+                                        //    //else
+                                        //    //    ps.spo2 = "--";
                                     
-                                            //    b_SPO2 = true;
-                                        }
-
-
-                                }
+                                        //    //    b_SPO2 = true;
+                                        //}
+                                    }
                                     using (StreamWriter writer = new StreamWriter(".\\Data\\WriteCsv.csv"))
                                     {
                                         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
@@ -617,7 +629,7 @@ namespace MyToDo.ViewModels
                                     }
                                 #region Python
                                 var psi = new ProcessStartInfo();
-                                psi.FileName = @"D:\Develop\Python\venv\Scripts\python.exe";
+                                psi.FileName = @"C:\Users\Administrator\AppData\Local\Programs\Python\Python39\python.exe";
                                 var script = ".\\Data\\main1.py";
                                 psi.Arguments = $"\"{script}\"";
                                 psi.UseShellExecute = false;
@@ -638,15 +650,6 @@ namespace MyToDo.ViewModels
                                     b_SPO2 = true;
                                     ps.hr = str[2];
                                     HR = true;
-                                    
-                                    //假資料
-                                    //double Hand_temp = double.Parse(ps.hand_temp);
-                                    //Hand_temp = 0.0086 * (Hand_temp - 28.3) + 36.58;
-
-                                    //ps.spo2 = "97.8";
-                                    //ps.hr = "78";
-                                    //ps.hand_temp = Hand_temp.ToString();
-
                                 }
                                 else
                                     break;
@@ -750,19 +753,28 @@ namespace MyToDo.ViewModels
                                         break;
                                 }
 
-                            //圖表添加數據
-                            if (_trend != "--")
+                                //圖表添加數據
+                                if (_trend != "--")
+                                {
+                                    LastHourSeries[0].Values.Add(new ObservableValue(double.Parse(_trend)));
+                                    LastHourSeries[0].Values.RemoveAt(0);
+                                }
+                                //如果連接中，push資料
+                                    if (AppSession.IsConnected == true)
+                                { 
+                                    if(ps.hr!="--" && ps.spo2 != "--"&& ps.hand_temp!="--")
+                                        PushData(ps.hr, ps.spo2, ps.hand_temp);
+                                }
+                            }
+                            else
                             {
-                                LastHourSeries[0].Values.Add(new ObservableValue(double.Parse(_trend)));
-                                LastHourSeries[0].Values.RemoveAt(0);
+                                TaskBars[0].Content = "--";
+                                TaskBars[1].Content = "--";
+                                TaskBars[2].Content = "--";
+                                AppSession.APPHR = TaskBars[0].Content;
+                                AppSession.APPTemp = TaskBars[1].Content;
+                                AppSession.APPSPO2 = TaskBars[2].Content;
                             }
-                            //如果連接中，push資料
-                                if (AppSession.IsConnected == true)
-                            { 
-                                if(ps.hr!="--" && ps.spo2 != "--"&& ps.hand_temp!="--")
-                                    PushData(ps.hr, ps.spo2, ps.hand_temp);
-                            }
-                        }
                             _serialPort.Close();
                         }
                         else
