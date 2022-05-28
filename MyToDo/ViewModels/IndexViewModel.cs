@@ -44,6 +44,7 @@ namespace MyToDo.ViewModels
             _serialPort = new SerialPort();
             TaskBars = new ObservableCollection<TaskBar>();
             MouseUsers = new ObservableCollection<MouseUserDto>();
+
             LastHourSeries = new SeriesCollection
             {
                 new LineSeries
@@ -92,6 +93,40 @@ namespace MyToDo.ViewModels
                                 new ObservableValue(0),
                                 new ObservableValue(0),
                                 new ObservableValue(0),
+                    }
+                }
+            };
+            LastHourSeries2 = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    AreaLimit = -10,
+                    Values = new ChartValues<ObservableValue>
+                    {
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
                                 new ObservableValue(0),
                                 new ObservableValue(0),
                                 new ObservableValue(0),
@@ -112,6 +147,58 @@ namespace MyToDo.ViewModels
                     }
                 }
             };
+            LastHourSeries3 = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    AreaLimit = -10,
+                    Values = new ChartValues<ObservableValue>
+                    {
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                                new ObservableValue(0),
+                    }
+                }
+            };
+
             InitTextBar();
             this.regionManager = provider.Resolve<IRegionManager>();
             this.pushDataService = pushDataService;
@@ -339,7 +426,9 @@ namespace MyToDo.ViewModels
 
         }
 
-        public SeriesCollection LastHourSeries { get; set; }
+        public SeriesCollection LastHourSeries { get; set; }//心率chart
+        public SeriesCollection LastHourSeries2 { get; set; }//血氧chart
+        public SeriesCollection LastHourSeries3 { get; set; }//體溫chart
         
 
         private string trend;
@@ -349,7 +438,20 @@ namespace MyToDo.ViewModels
             get { return trend; }
             set { trend = value; RaisePropertyChanged(); }
         }
+        private string trend2;
 
+        public string _trend2
+        {
+            get { return trend; }
+            set { trend = value; RaisePropertyChanged(); }
+        }
+        private string trend3;
+
+        public string _trend3
+        {
+            get { return trend; }
+            set { trend = value; RaisePropertyChanged(); }
+        }
 
         #region 更新實時數據
 
@@ -570,7 +672,7 @@ namespace MyToDo.ViewModels
                                             ppg.channel1 = long.Parse(Channels[1]);
                                             ppg.channel2 = long.Parse(Channels[2]);
                                             ppg.channel3 = long.Parse(Channels[3]);
-                                            if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 20000 || ppg.channel2 < 20000 || ppg.channel3 < 20000)
+                                            if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 60000 || ppg.channel2 < 60000 || ppg.channel3 < 60000)
                                             {
                                                 uselessdata = uselessdata +1;
                                                 if( uselessdata > 50 )
@@ -629,7 +731,8 @@ namespace MyToDo.ViewModels
                                     }
                                 #region Python
                                 var psi = new ProcessStartInfo();
-                                psi.FileName = @"C:\Users\Administrator\AppData\Local\Programs\Python\Python39\python.exe";
+                                //psi.FileName = @"C:\Users\Administrator\AppData\Local\Programs\Python\Python39\python.exe";
+                                psi.FileName = @"D:\Develop\Python\venv\Scripts\python.exe";
                                 var script = ".\\Data\\main1.py";
                                 psi.Arguments = $"\"{script}\"";
                                 psi.UseShellExecute = false;
@@ -661,7 +764,6 @@ namespace MyToDo.ViewModels
                                     Console.WriteLine(ex.Message);
                                 }
                                 #endregion
-
                                 #region 假的板子讀取資料
                                 //try
                                 //{
