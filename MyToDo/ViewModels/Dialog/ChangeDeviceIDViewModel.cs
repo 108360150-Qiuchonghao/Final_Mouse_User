@@ -25,16 +25,30 @@ namespace MyToDo.ViewModels.Dialog
         #region command
         private void Cancel()
         {
-                RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
-                
+            RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
+
         }
         private void Confirm()
         {
-            
-                IDialogParameters parameters = new DialogParameters();
-                parameters.Add("DeviceID", NewDeviceID);
-                RequestClose?.Invoke(new DialogResult(ButtonResult.OK, parameters));
-                
+
+            IDialogParameters parameters = new DialogParameters();
+
+            string callbacktitle = "";
+            switch (Title)
+            {
+                case "ChangeDeviceId":
+                    callbacktitle = "DeviceID";
+                    break;
+                case "ChangePython":
+                    callbacktitle = "PythoRoute";
+                    break;
+                case "ChangeIP":
+                    callbacktitle = "IPAddress";
+                    break;
+            }
+            parameters.Add(callbacktitle, NewDeviceID);
+            RequestClose?.Invoke(new DialogResult(ButtonResult.OK, parameters));
+
 
         }
         #endregion
@@ -42,20 +56,33 @@ namespace MyToDo.ViewModels.Dialog
         public void OnDialogOpened(IDialogParameters parameters)
         {
             //打开对话框的时候解析传递进来的参数
-            Message = parameters.GetValue<string>("DeviceID");
+            string str = parameters.GetValue<string>("ChangeItem");
+            Title = str;
+            switch (str)
+            {
+                case "ChangeDeviceId":
+                    Message = (string)Properties.Settings.Default["DeviceID"];
+                    break;
+                case "ChangePython":
+                    Message = (string)Properties.Settings.Default["PythoRoute"];
+                    break;
+                case "ChangeIP":
+                    Message = (string)Properties.Settings.Default["IPAddress"];
+                    break;
+            }
         }
 
         public bool CanCloseDialog()
         {
-           return true;
+            return true;
         }
 
         public void OnDialogClosed()
         {
-            
+
         }
 
-        
+
         public string DialogHostName { get; set; }
         public event Action<IDialogResult> RequestClose;
 
@@ -81,6 +108,13 @@ namespace MyToDo.ViewModels.Dialog
             set { newid = value; RaisePropertyChanged(); }
         }
 
-        public string Title { get; }
+        private string title;
+
+        public string Title
+        {
+            get { return title; }
+            set { title = value; RaisePropertyChanged(); }
+        }
+
     }
 }

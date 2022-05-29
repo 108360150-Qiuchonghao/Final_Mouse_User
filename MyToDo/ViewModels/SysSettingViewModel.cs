@@ -15,19 +15,21 @@ using Prism.Ioc;
 
 namespace MyToDo.ViewModels
 {
-    public class SysSettingViewModel: NavigationViewModel
+    public class SysSettingViewModel : NavigationViewModel
     {
         public SysSettingViewModel(IDialogHostService dialog, IContainerProvider provider) : base(provider)
         {
-            Devicepidvid = Settings.Default["DeviceID"].ToString(); 
-            ShowAddCommand = new DelegateCommand(ShowAdd);
+            Devicepidvid = Settings.Default["DeviceID"].ToString();
+            PythonAddress = Settings.Default["PythoRoute"].ToString();
+            IPAddress = Settings.Default["IPAddress"].ToString();
+            ShowAddCommand = new DelegateCommand<string>(ShowAdd);
             SelectRadio = new DelegateCommand(Select);
             ChangeExitDialogShow = new DelegateCommand(changeExitDialogShow);
             choice = new ChoicesDto();
             choice.Choice = (bool)Properties.Settings.Default["ExitorHide"];
             Choice1 = !choice.Choice;
             Exitdialogshow = (bool)Properties.Settings.Default["ExitDialogShow"];
-             this.dialog = dialog;
+            this.dialog = dialog;
         }
 
         private string devicepidvid;
@@ -37,35 +39,54 @@ namespace MyToDo.ViewModels
             set { devicepidvid = value; RaisePropertyChanged(); }
         }
 
+        private string pythonaddress;
+        public string PythonAddress
+        {
+            get { return pythonaddress; }
+            set { pythonaddress = value; RaisePropertyChanged(); }
+        }
+
+        private string ipaddress;
+        public string IPAddress
+        {
+            get { return ipaddress; }
+            set { ipaddress = value; RaisePropertyChanged(); }
+        }
+
         private string newid;
         public string NewID
         {
             get { return newid; }
             set { newid = value; RaisePropertyChanged(); }
         }
-        public DelegateCommand ShowAddCommand { get; private set; }
+        public DelegateCommand<string> ShowAddCommand { get; private set; }
         public DelegateCommand ChangeExitDialogShow { get; private set; }
         public DelegateCommand SelectRadio { get; set; }
         private readonly IDialogHostService dialog;
-     
-        void ShowAdd()
+
+        public void ShowAdd(string arg)
         {
             DialogParameters keys = new DialogParameters();
-            keys.Add("DeviceID", Devicepidvid);
+            keys.Add("ChangeItem", arg);
             dialog.ShowDialog("ChangeDeviceIDView", keys, DialogCallback);
         }
 
         private void DialogCallback(IDialogResult result)
         {
-            ButtonResult  result1 = result.Result;
+            ButtonResult result1 = result.Result;
 
             if (result1 == ButtonResult.OK)
             {
-               
-                var param = result.Parameters.GetValue<string>("DeviceID");
-                Devicepidvid = param;
-                Properties.Settings.Default["DeviceID"] = Devicepidvid;
+                string type = result.Parameters.ToString();
+                type = type.Split('=')[0];
+                type = type.Split('?')[1];
+                var param = result.Parameters.GetValue<string>(type);
+                Properties.Settings.Default[type] = param;
                 Properties.Settings.Default.Save();
+                Devicepidvid = Settings.Default["DeviceID"].ToString();
+                PythonAddress = Settings.Default["PythoRoute"].ToString();
+                IPAddress = Settings.Default["IPAddress"].ToString();
+
             }
             else
                 return;

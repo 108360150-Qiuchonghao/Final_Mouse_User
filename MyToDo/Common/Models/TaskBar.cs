@@ -14,39 +14,44 @@ namespace MyToDo.Common.Models
         private string content;
         private string color;
         private string target;
+        private string status;
 
-
-        public string Icon 
+        public string Icon
         {
             get { return icon; }
-            set { icon = value; }
+            set { icon = value; RaisePropertyChanged(); }
         }
-        
+
         public string Title
         {
             get { return titile; }
-            set { titile = value; }
+            set { titile = value; RaisePropertyChanged(); }
         }
-        
+
         public string Content
         {
             get { return content; }
             set { content = value; RaisePropertyChanged(); }
         }
-        
-        public string Color 
+
+        public string Color
         {
             get { return color; }
-            set { color = value; }
+            set { color = value; RaisePropertyChanged(); }
         }
-        
+
         /*觸發目標*/
         public string Target
         {
             get { return target; }
-            set { target = value; }
+            set { target = value; RaisePropertyChanged(); }
         }
 
+        public string Status
+        {
+            get { return status; }
+            set { status = value; RaisePropertyChanged(); }
+        }
 
     }
 }

@@ -11,5 +11,11 @@
     <Setting Name="ExitDialogShow" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="PythoRoute" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Administrator\AppData\Local\Programs\Python\Python39\python.exe</Value>
+    </Setting>
+    <Setting Name="IPAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://127.0.0.1:3000/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

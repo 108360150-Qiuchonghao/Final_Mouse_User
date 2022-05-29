@@ -24,6 +24,7 @@ using MyToDo.Service.TestService;
 using MyToDo.Service.GetData;
 using MyToDo.Service.PushData;
 using SciChart.Charting.Visuals;
+using MyToDo.Properties;
 
 namespace MyToDo
 {
@@ -82,9 +83,9 @@ namespace MyToDo
         {
             containerRegistry.GetContainer()
                 .Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
-
+            string URL = Settings.Default["IPAddress"].ToString();
             //containerRegistry.GetContainer().RegisterInstance(@"http://127.0.0.1:3000/", serviceKey: "webUrl");
-            containerRegistry.GetContainer().RegisterInstance(@"http://031a-2001-b011-400a-1d98-701d-aa98-a64f-f1c4.ngrok.io/", serviceKey: "webUrl");
+            containerRegistry.GetContainer().RegisterInstance(URL, serviceKey: "webUrl");
 
             containerRegistry.Register<ILoginService,LoginService>();
             containerRegistry.Register<ITestLoginService, TestLoginService>();

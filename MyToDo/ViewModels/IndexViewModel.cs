@@ -23,7 +23,7 @@ using System.Windows.Threading;
 using MyToDo.Properties;
 using static System.Net.Mime.MediaTypeNames;
 using MyToDo.Service.PushData;
-using MyToDo.Service.GetData;  
+using MyToDo.Service.GetData;
 using Prism.Events;
 using CsvHelper;
 using System.IO;
@@ -31,14 +31,15 @@ using CsvHelper.Configuration;
 using System.Globalization;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace MyToDo.ViewModels
 {
     public class IndexViewModel : NavigationViewModel
     {
-        
+
         private readonly IRegionManager regionManager;
-        public IndexViewModel(IContainerProvider provider, IDialogHostService dialog, IPushDataService pushDataService, IConnectService connectService,IEventAggregator aggregator) : base(provider)
+        public IndexViewModel(IContainerProvider provider, IDialogHostService dialog, IPushDataService pushDataService, IConnectService connectService, IEventAggregator aggregator) : base(provider)
         {
             UpdateLoading(true);
             _serialPort = new SerialPort();
@@ -154,47 +155,47 @@ namespace MyToDo.ViewModels
                     AreaLimit = -10,
                     Values = new ChartValues<ObservableValue>
                     {
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
-                                new ObservableValue(0),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
+                                new ObservableValue(30),
                     }
                 }
             };
@@ -207,6 +208,8 @@ namespace MyToDo.ViewModels
             this.aggregator = aggregator;
             NavigateCommand = new DelegateCommand<TaskBar>(Navigate);
             ShowAddCommand = new DelegateCommand(ReConnCommand);
+            SelectIndex = 0;
+            ProgressWords = "--";
             InitIcon();
             CreateTaskBars();
 
@@ -219,9 +222,9 @@ namespace MyToDo.ViewModels
             //timer.Start();
             UpdateLoading(false);
         }
-        
-         private void CroseTime()
-         {
+
+        private void CroseTime()
+        {
             while (true)
             {
                 Timer_Tick();
@@ -249,7 +252,7 @@ namespace MyToDo.ViewModels
         public ObservableCollection<TaskBar> taskBars;
         public ObservableCollection<TaskBar> TaskBars
         {
-            get{ return taskBars; }
+            get { return taskBars; }
             set { taskBars = value; RaisePropertyChanged(); }
         }
 
@@ -276,24 +279,24 @@ namespace MyToDo.ViewModels
         }
         private string whichfactor;
 
-        public string  WhichFactor
+        public string WhichFactor
         {
             get { return whichfactor; }
             set { whichfactor = value; RaisePropertyChanged(); }
         }
-   
+
 
 
         //如果系統未連接，則嘗試重連，并獲取新的token
         //如果系統連接，提示已經連接
-        async void Connect() 
+        async void Connect()
         {
             string DeviceID = Properties.Settings.Default["DeviceID"].ToString();
             var loginResult = await connectService.Connect(new ConnectionDto()
             {
                 MouseId = DeviceID
             });
-            if(loginResult.Status==true)
+            if (loginResult.Status == true)
             {
                 AppSession.IsConnected = true;
                 AppSession.UserName = loginResult.Result.UserName;
@@ -301,7 +304,7 @@ namespace MyToDo.ViewModels
             }
             else
             {
-                AppSession.IsConnected=false;
+                AppSession.IsConnected = false;
                 AppSession.UserName = "現在是離線模式";
                 Title = $"您好，{AppSession.UserName}";
             }
@@ -310,52 +313,64 @@ namespace MyToDo.ViewModels
 
         void ReConnCommand()
         {
-            if(AppSession.IsConnected==true)
+            if (AppSession.IsConnected == true)
             {
-               // aggregator.SendMessage("已經連接");
+                // aggregator.SendMessage("已經連接");
             }
-            else if(AppSession.IsConnected==false)
+            else if (AppSession.IsConnected == false)
             {
                 Connect();
             }
+        }
+
+        private int selectIndex;
+
+        public int SelectIndex
+        {
+            get { return selectIndex; }
+            set { selectIndex = value; RaisePropertyChanged(); }
         }
         private void Navigate(TaskBar obj)
         {
             NavigationParameters param = new NavigationParameters();
             // ToName.Name = obj.Title;
             string unit = obj.Title;
-            switch(unit)
+            switch (unit)
             {
                 case "心率:":
+                    SelectIndex = 0;
                     _trend = AppSession.APPHR;
                     WhichFactor = "bpm";
                     Introducation = "心率（Heart rate）是指心臟收縮（contractions）跳動的頻率（beats）和每分鐘跳動的次數（bpm），正常人平靜時（安靜心率）每分鐘60到100次（60~100bpm(次/分鐘)），運動時心跳會加速，心肺功能較好的運動員會比正常人的心跳要慢。";
-                break;
-                case "體溫:":
-                    _trend = AppSession.APPTemp;
-                    WhichFactor = "℃";
-                    Introducation = "體溫指生物的身體溫度。在正常情況下，人類體溫一般為37℃或者98.6℉。經口腔測量的體溫一般為36.8±0.7℃（98.2±1.3℉）。亦即攝氏36.1度至37.5度，或者華氏97.9度至99.5度。體溫反應了機體新陳代謝的結果，也是機體發揮各項正常功能的必備條件之一。";
                     break;
                 case "血氧:":
+                    SelectIndex = 1;
                     _trend = AppSession.APPSPO2;
                     WhichFactor = "%";
                     Introducation = "血氧飽和度(Oxygen saturation)，或稱血氧濃度，是指血中氧飽和血紅蛋白相對於總血紅蛋白（不飽和+飽和）的比例。人體需要並調節血液中氧氣的非常精確和特定的平衡。人體的正常動脈血氧飽和度為95-100％，如果該水平低於90％，則被認為是低氧血症。";
                     break;
+                case "體溫:":
+                    SelectIndex = 2;
+                    _trend = AppSession.APPTemp;
+                    WhichFactor = "℃";
+                    Introducation = "體溫指生物的身體溫度。在正常情況下，人類體溫一般為37℃或者98.6℉。經口腔測量的體溫一般為36.8±0.7℃（98.2±1.3℉）。亦即攝氏36.1度至37.5度，或者華氏97.9度至99.5度。體溫反應了機體新陳代謝的結果，也是機體發揮各項正常功能的必備條件之一。";
+                    break;
+
             }
             //LastHourSeries[0].Values.Clear();
-            CreateChart();
-            if (MouseUsers.Count != 0)
-            {
-                int index = 0;
-                foreach (MouseUserDto mouseUserDto in MouseUsers)
-                {
-                    if (mouseUserDto.User_ID == ToName.Name)
-                        ToName.index = index;
-                    else
-                        index++;
-                }
-            }
-           
+            //CreateChart();
+            //if (MouseUsers.Count != 0)
+            //{
+            //    int index = 0;
+            //    foreach (MouseUserDto mouseUserDto in MouseUsers)
+            //    {
+            //        if (mouseUserDto.User_ID == ToName.Name)
+            //            ToName.index = index;
+            //        else
+            //            index++;
+            //    }
+            //}
+
         }
         private string introducation;
 
@@ -366,11 +381,11 @@ namespace MyToDo.ViewModels
         }
 
 
-        private void CreateTaskBars() 
+        private void CreateTaskBars()
         {
-            TaskBars.Add(new TaskBar() { Icon = "CardsHeart", Title = "心率:", Content = "--", Color = "#FFD6D6D6", Target = "bpm" });
-            TaskBars.Add(new TaskBar() { Icon = "LiquidSpot", Title = "血氧:", Content = "--", Color = "#FFD6D6D6", Target = "%" });
-            TaskBars.Add(new TaskBar() { Icon = "Thermometer", Title = "體溫:", Content = "--", Color = "#FFD6D6D6", Target = "℃" });
+            TaskBars.Add(new TaskBar() { Icon = "CardsHeart", Title = "心率:", Content = "--", Color = "#FFD6D6D6", Target = "bpm", Status = "沒有數據" });
+            TaskBars.Add(new TaskBar() { Icon = "LiquidSpot", Title = "血氧:", Content = "--", Color = "#FFD6D6D6", Target = "%", Status = "沒有數據" });
+            TaskBars.Add(new TaskBar() { Icon = "Thermometer", Title = "體溫:", Content = "--", Color = "#FFD6D6D6", Target = "℃", Status = "沒有數據" });
         }
 
         #region 两个Icon的类
@@ -416,7 +431,7 @@ namespace MyToDo.ViewModels
         #endregion
 
 
-        private void InitTextBar() 
+        private void InitTextBar()
         {
 
             Title = $"您好，{AppSession.UserName}";
@@ -429,7 +444,7 @@ namespace MyToDo.ViewModels
         public SeriesCollection LastHourSeries { get; set; }//心率chart
         public SeriesCollection LastHourSeries2 { get; set; }//血氧chart
         public SeriesCollection LastHourSeries3 { get; set; }//體溫chart
-        
+
 
         private string trend;
 
@@ -507,7 +522,7 @@ namespace MyToDo.ViewModels
                 else
                     return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -561,178 +576,303 @@ namespace MyToDo.ViewModels
             public long channel2 { get; set; }
             public long channel3 { get; set; }
         }
+        //控制顯示正在計算的progressbar的True和False
 
-        //
-        private void Timer_Tick( )
+        private Boolean isIndeterminate;
+
+        public Boolean IsIndeterminate
         {
-                MouseIsCon = ListenMouse();
+            get { return isIndeterminate; }
+            set { isIndeterminate = value; RaisePropertyChanged(); }
+        }
+        //控制progressbar右側的文字提示
+        private string progresswords;
 
-                if (MouseIsCon == false)//step2：如果没有连接到，则，显示未连接，请检查等字样
+        public string ProgressWords
+        {
+            get { return progresswords; }
+            set { progresswords = value; RaisePropertyChanged(); }
+        }
+
+
+        //判断数据是否符合
+        private void Judgingdatastatus(string HR, string SPO2, string TEMP)
+        {
+            double hr = double.Parse(HR);
+            double spo2 = double.Parse(SPO2);
+            double temp = double.Parse(TEMP);
+            #region 判斷心率
+            //判断心率
+            if (hr > 150)
+            {
+                TaskBars[0].Color = "#FFFA6D6D";//红色
+                TaskBars[0].Status = "當前心率過高";//红色
+                                              // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
+                                              //    new ToastContentBuilder()
+                                              //        .AddArgument("action", "viewConversation")
+                                              //        .AddArgument("conversationId", 9813)
+                                              //        .AddText("當前心率過高")
+                                              //        .AddText($"心率：{hr}")
+                                              //        .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
+            }
+            else if (hr > 120)
+            {
+                TaskBars[0].Color = "#FFFAA25A";//黄色
+                TaskBars[0].Status = "當前心率略高";//黄色
+            }
+            else if (hr > 60)
+            {
+                TaskBars[0].Color = "#FFD6D6D6";//正常灰色
+                TaskBars[0].Status = "當前心率正常";//正常灰色
+            }
+            else
+            {
+                TaskBars[0].Color = "#FFA9DEF4";//淡蓝色--过低
+                TaskBars[0].Status = "當前心率過低";//淡蓝色--过低
+            }
+            #endregion
+            #region 判断血氧
+            //判断血氧
+            if (spo2 > 95)
+            {
+                TaskBars[1].Color = "#FFD6D6D6";//正常灰色
+                TaskBars[1].Status = "當前血氧正常";//红色
+
+            }
+            else if (spo2 > 90)
+            {
+                TaskBars[1].Color = "#FFFAA25A";//黄色
+                TaskBars[1].Status = "當前血氧過低";//黄色
+            }
+            else
+            {
+                TaskBars[1].Color = "#FFFA6D6D";//红色
+                TaskBars[1].Status = "當前血氧危險";//红色
+            }
+            #endregion
+            #region 判断温度
+            //判断温度
+            if (temp > 37.8)
+            {
+                TaskBars[2].Color = "#FFFA6D6D";//红色
+                TaskBars[2].Status = "當前體溫過高";//红色
+
+            }
+            else if (temp > 37.2)
+            {
+                TaskBars[2].Color = "#FFFAA25A";//黄色
+                TaskBars[2].Status = "當前體溫略高";//黄色
+            }
+            else if (temp > 36.3)
+            {
+                TaskBars[2].Color = "#FFD6D6D6";//正常灰色
+                TaskBars[2].Status = "當前體溫正常";//黄色
+            }
+            else
+            {
+                TaskBars[2].Color = "#FFA9DEF4";//淡蓝色--过低
+                TaskBars[2].Status = "當前體溫過低";//淡蓝色--过低
+            }
+            #endregion
+        }
+
+
+        private void Timer_Tick()
+        {
+            MouseIsCon = ListenMouse();
+
+            if (MouseIsCon == false)//step2：如果没有连接到，则，显示未连接，请检查等字样
+            {
+                MouseStatus = "滑鼠連接有誤，請檢查！";
+                AppSession.APPMouseStatus = MouseStatus;
+                Icon1Color = "Red";
+                TaskBars[0].Content = "--";
+                TaskBars[1].Content = "--";
+                TaskBars[2].Content = "--";
+                TaskBars[0].Status = "沒有數據";
+                TaskBars[1].Status = "沒有數據";
+                TaskBars[2].Status = "沒有數據";
+                AppSession.APPHR = TaskBars[0].Content;
+                AppSession.APPTemp = TaskBars[1].Content;
+                AppSession.APPSPO2 = TaskBars[2].Content;
+                _trend = "--";
+                ProgressWords = "--";
+                IsIndeterminate = false;
+            }
+            else//step3：如果连接到，则做。。。。
+            {
+                try
                 {
-                    MouseStatus = "滑鼠連接有誤，請檢查！";
+                    MouseStatus = "滑鼠正常連接";
                     AppSession.APPMouseStatus = MouseStatus;
-                    Icon1Color = "Red";
-                    TaskBars[0].Content = "--";
-                    TaskBars[1].Content = "--";
-                    TaskBars[2].Content = "--";
-                    AppSession.APPHR = TaskBars[0].Content;
-                    AppSession.APPTemp = TaskBars[1].Content;
-                    AppSession.APPSPO2 = TaskBars[2].Content;
-                     _trend = "--";
-                }
-                else//step3：如果连接到，则做。。。。
-                {
-                    try
+                    Icon1Color = "Black";
+                    b_SPO2 = false;
+                    b_BME = false;
+                    b_BME_EM = false;
+                    HR = false;
+                    Temp = false;
+                    person ps = new person();
+                    _serialPort.PortName = portnames[0];
+                    _serialPort.BaudRate = 115200;
+                    _serialPort.DataBits = 8;
+                    _serialPort.Open();
+                    if (_serialPort.IsOpen)
                     {
-                        MouseStatus = "滑鼠正常連接";
-                        AppSession.APPMouseStatus = MouseStatus;
-                        Icon1Color = "Black";
-                        b_SPO2 = false;
-                        b_BME = false;
-                        b_BME_EM = false;
-                        HR = false;
-                        Temp = false;
-                        person ps = new person();
-                        _serialPort.PortName = portnames[0];
-                        _serialPort.BaudRate = 115200;
-                        _serialPort.DataBits = 8;
-                        _serialPort.Open();
-                        if (_serialPort.IsOpen)
+                        while (b_SPO2 == false || HR == false || Temp == false)
                         {
-                            while (b_SPO2 == false || HR == false || Temp == false)
+
+                            #region 原本直接從serialport讀生理參數
+                            //try
+                            //{
+                            //    //1.先读取资料
+                            //    String ppgString = _serialPort.ReadLine();
+                            //    String[] ppgArray2 = ppgString.Split(':');
+                            //    //2.按照开头字段做判断
+                            //    /*
+                            //      未來的格式：
+                            //      SPO2:xx.xxx
+                            //      HR:xx.xxxx
+                            //      TEMP:xx.xxxx
+                            //      BME:xx.xx,xx.xx,xx.xx
+                            //      BME_EN:xx.xx,xx.xx,xx.xx */
+
+                            //    switch (ppgArray2[0])
+                            //    {
+                            //        case "SPO2":
+                            //            ps.spo2 = ppgArray2[1].Split('.')[0];
+                            //            b_SPO2 = true;
+                            //            break;
+                            //        case "HR":
+                            //            ps.hr = ppgArray2[1].Split('.')[0];
+                            //            HR = true;
+                            //            break;
+                            //        case "TEMP":
+                            //            ps.hand_temp = ppgArray2[1].Split('.')[0];
+                            //            Temp = true;
+                            //            break;
+                            //        case "BME":
+                            //            String[] ppgArray3 = ppgArray2[1].Split(',');
+                            //            //ps.hand_temp = ppgArray3[0];
+                            //            ps.hand_humidity = ppgArray3[1];
+                            //            ps.hand_pressure = ppgArray3[2];
+                            //            b_BME = true;
+                            //            ps.envir_temp = "1";
+                            //            ps.envir_humidity = "2";
+                            //            ps.envir_pressure = "3";
+                            //            b_BME_EM = true;
+                            //            break;
+                            //        case "BME_EN":
+                            //            break;
+                            //    }
+                            //}
+                            //catch
+                            //{ }
+                            #endregion
+
+                            #region 適配真正的滑鼠，新的讀取方法,第一步：先去算出SPO2和HR
+                            try
                             {
-
-                                #region 原本直接從serialport讀生理參數
-                                //try
-                                //{
-                                //    //1.先读取资料
-                                //    String ppgString = _serialPort.ReadLine();
-                                //    String[] ppgArray2 = ppgString.Split(':');
-                                //    //2.按照开头字段做判断
-                                //    /*
-                                //      未來的格式：
-                                //      SPO2:xx.xxx
-                                //      HR:xx.xxxx
-                                //      TEMP:xx.xxxx
-                                //      BME:xx.xx,xx.xx,xx.xx
-                                //      BME_EN:xx.xx,xx.xx,xx.xx */
-
-                                //    switch (ppgArray2[0])
-                                //    {
-                                //        case "SPO2":
-                                //            ps.spo2 = ppgArray2[1].Split('.')[0];
-                                //            b_SPO2 = true;
-                                //            break;
-                                //        case "HR":
-                                //            ps.hr = ppgArray2[1].Split('.')[0];
-                                //            HR = true;
-                                //            break;
-                                //        case "TEMP":
-                                //            ps.hand_temp = ppgArray2[1].Split('.')[0];
-                                //            Temp = true;
-                                //            break;
-                                //        case "BME":
-                                //            String[] ppgArray3 = ppgArray2[1].Split(',');
-                                //            //ps.hand_temp = ppgArray3[0];
-                                //            ps.hand_humidity = ppgArray3[1];
-                                //            ps.hand_pressure = ppgArray3[2];
-                                //            b_BME = true;
-                                //            ps.envir_temp = "1";
-                                //            ps.envir_humidity = "2";
-                                //            ps.envir_pressure = "3";
-                                //            b_BME_EM = true;
-                                //            break;
-                                //        case "BME_EN":
-                                //            break;
-                                //    }
-                                //}
-                                //catch
-                                //{ }
-                                #endregion
-
-                                #region 適配真正的滑鼠，新的讀取方法,第一步：先去算出SPO2和HR
-                                try
+                                var records = new List<PPG>
                                 {
-                                    var records = new List<PPG>
+
+                                };
+                                int uselessdata = 0;
+                                int usefuldata = 0;
+                                for (int i = 0; i < 3200; i++)
+                                {
+                                    String IDString = _serialPort.ReadLine();
+                                    string[] ppgstring = IDString.Split(':');
+
+                                    if (ppgstring[0] == "ID")
+                                    {
+                                        string[] Channels = ppgstring[1].Split(',');
+                                        string id = Channels[0];
+
+                                        PPG ppg = new PPG();
+                                        ppg.channel1 = long.Parse(Channels[1]);
+                                        ppg.channel2 = long.Parse(Channels[2]);
+                                        ppg.channel3 = long.Parse(Channels[3]);
+                                        if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 60000 || ppg.channel2 < 60000 || ppg.channel3 < 60000)
+                                        {
+                                            uselessdata = uselessdata + 1;
+
+                                            if (uselessdata > 50)
+                                            {
+                                                usefuldata = 0;
+                                                ProgressWords = "手已鬆開";
+                                                IsIndeterminate = false;
+                                                TaskBars[0].Content = "--";
+                                                TaskBars[1].Content = "--";
+                                                TaskBars[2].Content = "--";
+
+                                                AppSession.APPHR = TaskBars[0].Content;
+                                                AppSession.APPTemp = TaskBars[1].Content;
+                                                AppSession.APPSPO2 = TaskBars[2].Content;
+                                                TaskBars[0].Color = "#FFD6D6D6";//正常灰色
+                                                TaskBars[1].Color = "#FFD6D6D6";//正常灰色
+                                                TaskBars[2].Color = "#FFD6D6D6";//正常灰色
+                                                _trend = "--";
+                                            }
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            usefuldata = usefuldata + 1;
+                                            if (usefuldata > 30)
+                                            {
+                                                uselessdata = 0;
+                                                ProgressWords = "正在計算";
+                                                IsIndeterminate = true;
+                                            }
+                                        }
+                                        records.Add(ppg);
+                                    }
+                                    else if (ppgstring[0] == "TEMP")
                                     {
 
-                                    };
-                                    int uselessdata = 0;
-                                    for (int i = 0; i< 3200;i++)
-                                    {
-                                        String IDString = _serialPort.ReadLine();
-                                        string[] ppgstring = IDString.Split(':');
-                                        
-                                        if (ppgstring[0] == "ID")
+                                        double Hand_temp = (double.Parse(ppgstring[1]));
+                                        if (Hand_temp > 10)
                                         {
-                                            string[] Channels = ppgstring[1].Split(',');
-                                            string id = Channels[0];
-                                            
-                                            PPG ppg = new PPG();
-                                            ppg.channel1 = long.Parse(Channels[1]);
-                                            ppg.channel2 = long.Parse(Channels[2]);
-                                            ppg.channel3 = long.Parse(Channels[3]);
-                                            if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 60000 || ppg.channel2 < 60000 || ppg.channel3 < 60000)
-                                            {
-                                                uselessdata = uselessdata +1;
-                                                if( uselessdata > 50 )
-                                                {
-                                                    TaskBars[0].Content = "--";
-                                                    TaskBars[1].Content = "--";
-                                                    TaskBars[2].Content = "--";
-                                                    AppSession.APPHR = TaskBars[0].Content;
-                                                    AppSession.APPTemp = TaskBars[1].Content;
-                                                    AppSession.APPSPO2 = TaskBars[2].Content;
-                                                    _trend = "--";
-                                                }
-                                                continue;
-                                            }
-                                            records.Add(ppg);
+                                            Hand_temp = 0.0086 * (Hand_temp - 28.3) + 36.58;
+                                            ps.hand_temp = (Hand_temp).ToString("0.00");
                                         }
-                                        else if(ppgstring[0] == "TEMP")
-                                        {
-           
-                                            double Hand_temp = (double.Parse(ppgstring[1]));
-                                            if (Hand_temp > 10)
-                                            {
-                                                Hand_temp = 0.0086 * (Hand_temp - 28.3) + 36.58;
-                                                ps.hand_temp = (Hand_temp).ToString("0.00");
-                                            }
-                                            else
-                                                ps.hand_temp = "--";
-                                                Temp = true;
-                                        }
-                                        //else if (ppgstring[0] == "HR")
-                                        //{
-                                        //    //if ((float.Parse(ppgstring[1]) / 10) < 30)
-                                        //    //    ps.hr = "--";
-                                        //    //else
-                                        //    //    ps.hr = (float.Parse(ppgstring[1]) / 10).ToString();
-                                        //    //HR = true;
-                                        //}
-                                        //else if (ppgstring[0] == "SPO2")
-                                        //{
-                                        //    //if ((float.Parse(ppgstring[1]) / 10) > 30)
-                                        //    //{
-                                        //    //    ps.spo2 = (float.Parse(ppgstring[1]) / 10).ToString();
-                                        //    //}
-                                        //    //else
-                                        //    //    ps.spo2 = "--";
-                                    
-                                        //    //    b_SPO2 = true;
-                                        //}
+                                        else
+                                            ps.hand_temp = "--";
+                                        Temp = true;
                                     }
-                                    using (StreamWriter writer = new StreamWriter(".\\Data\\WriteCsv.csv"))
+                                    //else if (ppgstring[0] == "HR")
+                                    //{
+                                    //    //if ((float.Parse(ppgstring[1]) / 10) < 30)
+                                    //    //    ps.hr = "--";
+                                    //    //else
+                                    //    //    ps.hr = (float.Parse(ppgstring[1]) / 10).ToString();
+                                    //    //HR = true;
+                                    //}
+                                    //else if (ppgstring[0] == "SPO2")
+                                    //{
+                                    //    //if ((float.Parse(ppgstring[1]) / 10) > 30)
+                                    //    //{
+                                    //    //    ps.spo2 = (float.Parse(ppgstring[1]) / 10).ToString();
+                                    //    //}
+                                    //    //else
+                                    //    //    ps.spo2 = "--";
+
+                                    //    //    b_SPO2 = true;
+                                    //}
+                                }
+                                using (StreamWriter writer = new StreamWriter(".\\Data\\WriteCsv.csv"))
+                                {
+                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                                     {
-                                        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                                        {
-                                            csv.WriteRecords(records);
-                                        }
+                                        csv.WriteRecords(records);
                                     }
+                                }
                                 #region Python
                                 var psi = new ProcessStartInfo();
+                                string PyUrl = Settings.Default["PythoRoute"].ToString();
+                                psi.FileName = PyUrl;
                                 //psi.FileName = @"C:\Users\Administrator\AppData\Local\Programs\Python\Python39\python.exe";
-                                psi.FileName = @"D:\Develop\Python\venv\Scripts\python.exe";
+                                //psi.FileName = @"D:\Develop\Python\venv\Scripts\python.exe";
                                 var script = ".\\Data\\main1.py";
                                 psi.Arguments = $"\"{script}\"";
                                 psi.UseShellExecute = false;
@@ -759,142 +899,150 @@ namespace MyToDo.ViewModels
 
                                 #endregion
                             }
-                                catch(Exception ex)
-                                { 
-                                    Console.WriteLine(ex.Message);
-                                }
-                                #endregion
-                                #region 假的板子讀取資料
-                                //try
-                                //{
-                                //    var records = new List<PPG>
-                                //    {
-
-                                //    };
-
-                                //    for (int i = 0; i < 800; i++)
-                                //    {
-                                //        PPG ppg = new PPG();
-                                //        string IDString = _serialPort.ReadLine();
-                                //        string[] Channels = IDString.Split(',');
-                                //        ppg.channel1 = long.Parse(Channels[0]);
-                                //        ppg.channel2 = long.Parse(Channels[1]);
-                                //        ppg.channel3 = long.Parse(Channels[2]);
-                                //        if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 100000 || ppg.channel2 < 100000 || ppg.channel3 < 100000)
-                                //        {
-                                //            continue;
-                                //        }
-                                //        records.Add(ppg);
-                                //    }
-                                //    using (StreamWriter writer = new StreamWriter(".\\Data\\WriteCsv.csv"))
-                                //    {
-                                //        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                                //        {
-                                //            csv.WriteRecords(records);
-                                //        }
-                                //    }
-                                //    #region Python
-                                //    var psi = new ProcessStartInfo();
-                                //    psi.FileName = @"C:\Users\Administrator\AppData\Local\Programs\Python\Python39\python.exe";
-                                //    var script = ".\\Data\\main.py";
-                                //    psi.Arguments = $"\"{script}\"";
-                                //    psi.UseShellExecute = false;
-                                //    psi.CreateNoWindow = true;
-                                //    psi.RedirectStandardOutput = true;
-                                //    psi.RedirectStandardError = true;
-                                //    var error = "";
-                                //    var results = "";
-                                //    using (var process = Process.Start(psi))
-                                //    {
-                                //        error = process.StandardError.ReadToEnd();
-                                //        results = process.StandardOutput.ReadToEnd();
-                                //    }
-                                //    string[] str = results.Split(";");
-                                //    string Str = results;
-                                //    if (str[0] != "")
-                                //    {
-                                //        ps.spo2 = Str.Split(';')[2];
-                                //        b_SPO2 = true;
-                                //        ps.hr = Str.Split(';')[1];
-                                //        HR = true;
-                                //        Temp = true;
-                                //        ps.hand_temp = "37";
-                                //    }
-                                //    else
-                                //        break;
-
-                                //    #endregion
-                                //}
-                                //catch
-                                //{ }
-                                #endregion
-
-                            }
-                            if (b_SPO2 == true && HR == true && Temp == true)
+                            catch (Exception ex)
                             {
-                                TaskBars[0].Content = ps.hr.ToString();
-                                TaskBars[1].Content = ps.spo2.ToString();
-                                TaskBars[2].Content = ps.hand_temp.ToString();
-                                AppSession.APPHR = TaskBars[0].Content;
-                                AppSession.APPSPO2 = TaskBars[1].Content;
-                                AppSession.APPTemp = TaskBars[2].Content;
-                                //切換圖表顯示哪一個參數
-                                switch (WhichFactor)
-                                {
-                                    case "bpm":
-                                        //_trend = double.Parse(TaskBars[0].Content);
-                                        _trend = TaskBars[0].Content;
-                                        break;
-                                    case "%":
-                                        //_trend = double.Parse(TaskBars[1].Content);
-                                        _trend = TaskBars[1].Content;
-                                        break;
-                                    case "℃":
-                                        //_trend = double.Parse(TaskBars[2].Content);
-                                        _trend = TaskBars[2].Content;
-                                        break;
-                                }
+                                Console.WriteLine(ex.Message);
+                            }
+                            #endregion
+                            #region 假的板子讀取資料
+                            //try
+                            //{
+                            //    var records = new List<PPG>
+                            //    {
 
-                                //圖表添加數據
-                                if (_trend != "--")
-                                {
-                                    LastHourSeries[0].Values.Add(new ObservableValue(double.Parse(_trend)));
-                                    LastHourSeries[0].Values.RemoveAt(0);
-                                }
-                                //如果連接中，push資料
-                                    if (AppSession.IsConnected == true)
-                                { 
-                                    if(ps.hr!="--" && ps.spo2 != "--"&& ps.hand_temp!="--")
-                                        PushData(ps.hr, ps.spo2, ps.hand_temp);
-                                }
-                            }
-                            else
+                            //    };
+
+                            //    for (int i = 0; i < 800; i++)
+                            //    {
+                            //        PPG ppg = new PPG();
+                            //        string IDString = _serialPort.ReadLine();
+                            //        string[] Channels = IDString.Split(',');
+                            //        ppg.channel1 = long.Parse(Channels[0]);
+                            //        ppg.channel2 = long.Parse(Channels[1]);
+                            //        ppg.channel3 = long.Parse(Channels[2]);
+                            //        if (ppg.channel1 > 500000 || ppg.channel2 > 500000 || ppg.channel3 > 500000 || ppg.channel1 < 100000 || ppg.channel2 < 100000 || ppg.channel3 < 100000)
+                            //        {
+                            //            continue;
+                            //        }
+                            //        records.Add(ppg);
+                            //    }
+                            //    using (StreamWriter writer = new StreamWriter(".\\Data\\WriteCsv.csv"))
+                            //    {
+                            //        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                            //        {
+                            //            csv.WriteRecords(records);
+                            //        }
+                            //    }
+                            //    #region Python
+                            //    var psi = new ProcessStartInfo();
+                            //    psi.FileName = @"C:\Users\Administrator\AppData\Local\Programs\Python\Python39\python.exe";
+                            //    var script = ".\\Data\\main.py";
+                            //    psi.Arguments = $"\"{script}\"";
+                            //    psi.UseShellExecute = false;
+                            //    psi.CreateNoWindow = true;
+                            //    psi.RedirectStandardOutput = true;
+                            //    psi.RedirectStandardError = true;
+                            //    var error = "";
+                            //    var results = "";
+                            //    using (var process = Process.Start(psi))
+                            //    {
+                            //        error = process.StandardError.ReadToEnd();
+                            //        results = process.StandardOutput.ReadToEnd();
+                            //    }
+                            //    string[] str = results.Split(";");
+                            //    string Str = results;
+                            //    if (str[0] != "")
+                            //    {
+                            //        ps.spo2 = Str.Split(';')[2];
+                            //        b_SPO2 = true;
+                            //        ps.hr = Str.Split(';')[1];
+                            //        HR = true;
+                            //        Temp = true;
+                            //        ps.hand_temp = "37";
+                            //    }
+                            //    else
+                            //        break;
+
+                            //    #endregion
+                            //}
+                            //catch
+                            //{ }
+                            #endregion
+
+                        }
+                        if (b_SPO2 == true && HR == true && Temp == true)
+                        {
+                            //假数据部分开始
+                            ps.hr = "180";
+                            //假数据部分结束
+
+                            TaskBars[0].Content = ps.hr.ToString();
+                            TaskBars[1].Content = ps.spo2.ToString();
+                            TaskBars[2].Content = ps.hand_temp.ToString();
+                            AppSession.APPHR = TaskBars[0].Content;
+                            AppSession.APPSPO2 = TaskBars[1].Content;
+                            AppSession.APPTemp = TaskBars[2].Content;
+                            Judgingdatastatus(AppSession.APPHR, AppSession.APPSPO2, AppSession.APPTemp);
+                            //切換圖表顯示哪一個參數
+                            switch (WhichFactor)
                             {
-                                TaskBars[0].Content = "--";
-                                TaskBars[1].Content = "--";
-                                TaskBars[2].Content = "--";
-                                AppSession.APPHR = TaskBars[0].Content;
-                                AppSession.APPTemp = TaskBars[1].Content;
-                                AppSession.APPSPO2 = TaskBars[2].Content;
+                                case "bpm":
+                                    //_trend = double.Parse(TaskBars[0].Content);
+                                    _trend = TaskBars[0].Content;
+                                    break;
+                                case "%":
+                                    //_trend = double.Parse(TaskBars[1].Content);
+                                    _trend = TaskBars[1].Content;
+                                    break;
+                                case "℃":
+                                    //_trend = double.Parse(TaskBars[2].Content);
+                                    _trend = TaskBars[2].Content;
+                                    break;
                             }
-                            _serialPort.Close();
+
+                            //圖表添加數據
+
+                            LastHourSeries[0].Values.Add(new ObservableValue(double.Parse(AppSession.APPHR)));
+                            LastHourSeries[0].Values.RemoveAt(0);
+                            LastHourSeries2[0].Values.Add(new ObservableValue(double.Parse(AppSession.APPSPO2)));
+                            LastHourSeries2[0].Values.RemoveAt(0);
+                            LastHourSeries3[0].Values.Add(new ObservableValue(double.Parse(AppSession.APPTemp)));
+                            LastHourSeries3[0].Values.RemoveAt(0);
+
+                            //如果連接中，push資料
+                            if (AppSession.IsConnected == true)
+                            {
+                                if (ps.hr != "--" && ps.spo2 != "--" && ps.hand_temp != "--")
+                                    PushData(ps.hr, ps.spo2, ps.hand_temp);
+                            }
                         }
                         else
                         {
-
+                            TaskBars[0].Content = "--";
+                            TaskBars[1].Content = "--";
+                            TaskBars[2].Content = "--";
+                            AppSession.APPHR = TaskBars[0].Content;
+                            AppSession.APPTemp = TaskBars[1].Content;
+                            AppSession.APPSPO2 = TaskBars[2].Content;
                         }
+                        _serialPort.Close();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                         Console.WriteLine(ex.Message);
-                    }
-                    finally
-                    {
-                        if (_serialPort.IsOpen)
-                            _serialPort.Close();
-                    }
 
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    if (_serialPort.IsOpen)
+                        _serialPort.Close();
+                }
+
+            }
             // make query here
             //step1:监测是否连接到滑鼠
         }
@@ -902,56 +1050,56 @@ namespace MyToDo.ViewModels
 
         #region pushdata
         private readonly IPushDataService pushDataService;
-        private readonly IConnectService connectService ;
+        private readonly IConnectService connectService;
         private new readonly IEventAggregator aggregator;
-        private async void PushData(string Hr,string Spo2,string Temp)
+        private async void PushData(string Hr, string Spo2, string Temp)
         {
-            
-                string DeviceID = Properties.Settings.Default["DeviceID"].ToString();
-                PushDataDto pushDataDto = new PushDataDto()
+
+            string DeviceID = Properties.Settings.Default["DeviceID"].ToString();
+            PushDataDto pushDataDto = new PushDataDto()
+            {
+                time = DateTime.Now.ToString("yyyy-MM-dd H:m:s"),
+                temp = float.Parse(Temp),
+                HR = float.Parse(Hr),
+                SPO2 = float.Parse(Spo2),
+                u_mouse_id = DeviceID
+            };
+
+            var loginResult = await pushDataService.AddHistory(pushDataDto);
+            if (loginResult.Status == true)
+            {
+                AppSession.IsConnected = true;
+                Icon2Type = "Wifi";
+                ConnectionStatus = "網路連接成功";
+                Title = $"您好，{AppSession.UserName}";
+            }
+            else if (loginResult.Status == false)
+            {
+                if (loginResult.Message == "PushError")
                 {
-                    time = DateTime.Now.ToString("yyyy-MM-dd H:m:s"),
-                    temp = float.Parse(Temp),
-                    HR = float.Parse(Hr),
-                    SPO2 = float.Parse(Spo2),
-                    u_mouse_id = DeviceID
-                };
-                
-                var loginResult = await pushDataService.AddHistory(pushDataDto);
-                if(loginResult.Status == true)
+
+                }
+                else
                 {
-                    AppSession.IsConnected = true;
-                    Icon2Type = "Wifi";
-                    ConnectionStatus = "網路連接成功";
+                    AppSession.IsConnected = false;
+                    Icon2Type = "WifiOff";
+                    ConnectionStatus = "網路連接失敗，請嘗試重新連接";
+                    AppSession.UserName = "現在是離線模式";
                     Title = $"您好，{AppSession.UserName}";
                 }
-                else if (loginResult.Status == false)
-                {
-                    if(loginResult.Message == "PushError")
-                    {
-                       
-                    }
-                    else
-                    {
-                        AppSession.IsConnected = false;
-                        Icon2Type = "WifiOff";
-                        ConnectionStatus = "網路連接失敗，請嘗試重新連接";
-                        AppSession.UserName = "現在是離線模式";
-                        Title = $"您好，{AppSession.UserName}";
-                }
             }
-            
-            
+
+
         }
-        
-        
+
+
         public void TryConnect()
         {
 
         }
         #endregion
         #region 表格
-        private void CreateChart() 
+        private void CreateChart()
         {
             //LastHourSeries[0].Values.Clear();
             for (int i = 0; i < LastHourSeries[0].Values.Count; i++)

@@ -58,5 +58,29 @@ namespace MyToDo.Properties {
                 this["ExitDialogShow"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python39\\python.exe")]
+        public string PythoRoute {
+            get {
+                return ((string)(this["PythoRoute"]));
+            }
+            set {
+                this["PythoRoute"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://127.0.0.1:3000/")]
+        public string IPAddress {
+            get {
+                return ((string)(this["IPAddress"]));
+            }
+            set {
+                this["IPAddress"] = value;
+            }
+        }
     }
 }

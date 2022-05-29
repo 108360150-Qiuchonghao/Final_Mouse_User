@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JWBB8BshMOo86r7VGnBx1xNkCm7f8pJvya5AVhuThxmVS5S8JTSCRWTrKWyvLmZXzEP2d602XFO7baY7tnyumg==",
+  "dgSpecHash": "u0YQeuXMF47nFdk6pjW3Nz9rO24DlOZ7++C7/F/H1zdJB0tKXnrd0ttM6v2cgyQT/S5vxozsw/x3+ziYHjLzqg==",
   "success": true,
-  "projectFilePath": "D:\\Develop\\wpf\\Mouse_User-main\\Mouse_User-main\\MyToDo.Shared\\MyToDo.Shared.csproj",
+  "projectFilePath": "D:\\develop\\WPF\\practice\\mytodo\\presentation\\Final_Mouse_User\\MyToDo.Shared\\MyToDo.Shared.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
