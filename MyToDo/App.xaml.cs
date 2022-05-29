@@ -84,6 +84,7 @@ namespace MyToDo
             containerRegistry.GetContainer()
                 .Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
             string URL = Settings.Default["IPAddress"].ToString();
+            //string URL = "http://127.0.0.1:3000/";
             //containerRegistry.GetContainer().RegisterInstance(@"http://127.0.0.1:3000/", serviceKey: "webUrl");
             containerRegistry.GetContainer().RegisterInstance(URL, serviceKey: "webUrl");
 

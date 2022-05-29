@@ -11,6 +11,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -22,13 +23,19 @@ namespace MyToDo.ViewModels
         public MiniwindowViewModel()
         {
 
-            
+
             _serialPort = new SerialPort();
             ExecuteCommand = new DelegateCommand(Execute);
-            timer.Tick += new EventHandler(Timer_Tick);
-            timer.Interval = TimeSpan.FromMilliseconds(500);
-            timer.Start();
-           
+
+            //新線程相關
+            Thread thread = new Thread(CroseTime);
+            thread.IsBackground = true;
+            thread.Start();
+
+            //timer.Tick += new EventHandler(Timer_Tick);
+            //timer.Interval = TimeSpan.FromMilliseconds(500);
+            //timer.Start();
+
         }
         public string Title { get; set; }
 
@@ -46,10 +53,11 @@ namespace MyToDo.ViewModels
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
-        void BackMainView() {
+        void BackMainView()
+        {
             RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
         }
 
@@ -182,12 +190,13 @@ namespace MyToDo.ViewModels
         }
         #endregion 更新實時數據
         //
-        private void Timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick( )
         {
+            Judgingdatastatus(AppSession.APPHR, AppSession.APPSPO2, AppSession.APPTemp);
             MouseStatus = AppSession.APPMouseStatus;
-            HRData = $"{AppSession.APPHR}bmp";
-            SPO2Data = $"{AppSession.APPSPO2}%" ;
-            TempData = $"{AppSession.APPTemp}℃" ;
+            HRData = $"{AppSession.APPHR} BPM";
+            SPO2Data = $"{AppSession.APPSPO2} %";
+            TempData = $"{AppSession.APPTemp} ℃";
             #region 原來的現在沒用
             //    //step1:监测是否连接到滑鼠
             //    MouseIsCon = ListenMouse();
@@ -288,10 +297,114 @@ namespace MyToDo.ViewModels
 
             //    }
             #endregion
-
-
-
         }
-        
+
+        private void CroseTime()
+        {
+            while (true)
+            {
+                Timer_Tick();
+                //Thread.Sleep(2000);
+            }
+        }
+
+        private string hrcolor;
+
+        public string HRColor
+        {
+            get { return hrcolor; }
+            set { hrcolor = value; RaisePropertyChanged(); }
+        }
+
+        private string spo2color;
+
+        public string SPO2Color
+        {
+            get { return spo2color; }
+            set { spo2color = value; RaisePropertyChanged(); }
+        }
+        private string tempcolor;
+
+        public string TEMPColor
+        {
+            get { return tempcolor; }
+            set { tempcolor = value; RaisePropertyChanged(); }
+        }
+        private void Judgingdatastatus(string HR, string SPO2, string TEMP)
+        {
+            if (HR != "--" && SPO2 != "--" && TEMP != "--")
+            {
+                double hr = double.Parse(HR);
+                double spo2 = double.Parse(SPO2);
+                double temp = double.Parse(TEMP);
+                #region 判斷心率
+                //判断心率
+                if (hr > 150)
+                {
+                    HRColor = "#FFFA6D6D";//红色
+                                          //TaskBars[0].Status = "當前心率過高";//红色
+
+                }
+                else if (hr > 120)
+                {
+                    HRColor = "#FFFAA25A";//黄色
+                                          //TaskBars[0].Status = "當前心率略高";//黄色
+                }
+                else if (hr > 60)
+                {
+                    HRColor = "#FFD6D6D6";//正常灰色
+                                          //TaskBars[0].Status = "當前心率正常";//正常灰色
+                }
+                else
+                {
+                    HRColor = "#FFA9DEF4";//淡蓝色--过低
+                                          //TaskBars[0].Status = "當前心率過低";//淡蓝色--过低
+                }
+                #endregion
+                #region 判断血氧
+                //判断血氧
+                if (spo2 > 95)
+                {
+                    SPO2Color = "#FFD6D6D6";//正常灰色
+                                            //TaskBars[1].Status = "當前血氧正常";//红色
+
+                }
+                else if (hr > 90)
+                {
+                    SPO2Color = "#FFFAA25A";//黄色
+                                            //TaskBars[1].Status = "當前血氧過低";//黄色
+                }
+                else
+                {
+                    SPO2Color = "#FFFA6D6D";//红色
+                                            //TaskBars[1].Status = "當前血氧危險";//红色
+                }
+                #endregion
+                #region 判断温度
+                //判断温度
+                if (temp > 37.8)
+                {
+                    TEMPColor = "#FFFA6D6D";//红色
+                                            //TaskBars[2].Status = "當前體溫過高";//红色
+
+                }
+                else if (temp > 37.2)
+                {
+                    TEMPColor = "#FFFAA25A";//黄色
+                                            //TaskBars[2].Status = "當前體溫略高";//黄色
+                }
+                else if (temp > 36.3)
+                {
+                    TEMPColor = "#FFD6D6D6";//正常灰色
+                                            //TaskBars[2].Status = "當前體溫正常";//黄色
+                }
+                else
+                {
+                    TEMPColor = "#FFA9DEF4";//淡蓝色--过低
+                                            //TaskBars[2].Status = "當前體溫過低";//淡蓝色--过低
+                }
+                #endregion
+            }
+        }
     }
-    }
+}

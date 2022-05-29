@@ -98,7 +98,7 @@ namespace MyToDo.Views.Dialog {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyToDo;component/views/dialog/miniwindowview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HealthCare;component/views/dialog/miniwindowview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\Dialog\MiniwindowView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

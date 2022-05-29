@@ -66,7 +66,7 @@ namespace MyToDo.Views.Dialog {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyToDo;component/views/dialog/addmouseuser.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HealthCare;component/views/dialog/addmouseuser.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\Dialog\AddMouseUser.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

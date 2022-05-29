@@ -130,8 +130,16 @@
             <TextBlock
                 Grid.Row="0"
                 Margin="20"
+                Cursor="Hand"
                 FontSize="20"
-                Text="地址設置" />
+                Text="地址設置">
+                <TextBlock.InputBindings>
+                    <MouseBinding
+                        Command="{Binding ShowAddCommand}"
+                        CommandParameter="ChangePython"
+                        MouseAction="LeftClick" />
+                </TextBlock.InputBindings>
+            </TextBlock>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <TextBlock
                     Margin="20,0,0,10"
@@ -179,16 +187,21 @@
                             MouseAction="LeftClick" />
                     </TextBox.InputBindings>
                 </TextBox>
+                <TextBlock
+                    Margin="20,0,0,10"
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    Text="(修改完IP後需要重啟軟體)" />
 
             </StackPanel>
             <Border
-                Grid.RowSpan="2"
+                Grid.RowSpan="3"
                 Margin="20,0,20,0"
                 BorderBrush="#DDDDDD"
                 BorderThickness="0,0,0,1" />
         </Grid>
         <Border
-            Grid.RowSpan="3"
+            Grid.RowSpan="4"
             BorderBrush="#DDDDDD"
             BorderThickness="2,0,0,2" />
     </Grid>

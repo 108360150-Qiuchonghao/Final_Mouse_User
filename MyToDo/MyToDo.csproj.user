@@ -5,6 +5,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>MyToDo</ActiveDebugProfile>
+    <_LastSelectedProfileId>D:\develop\WPF\practice\mytodo\presentation\Final_Mouse_User\MyToDo\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Update="App.xaml">

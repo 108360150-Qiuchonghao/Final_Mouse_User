@@ -292,7 +292,7 @@
                                         VerticalAlignment="Bottom"
                                         FontSize="18"
                                         Foreground="#303030"
-                                        Text="{Binding WhichFactor}" />
+                                        Text="BPM" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

@@ -42,6 +42,7 @@ namespace MyToDo.ViewModels
         public IndexViewModel(IContainerProvider provider, IDialogHostService dialog, IPushDataService pushDataService, IConnectService connectService, IEventAggregator aggregator) : base(provider)
         {
             UpdateLoading(true);
+
             _serialPort = new SerialPort();
             TaskBars = new ObservableCollection<TaskBar>();
             MouseUsers = new ObservableCollection<MouseUserDto>();
@@ -223,12 +224,15 @@ namespace MyToDo.ViewModels
             UpdateLoading(false);
         }
 
+        //Login
+
+
         private void CroseTime()
         {
             while (true)
             {
                 Timer_Tick();
-                Thread.Sleep(2000);
+                //Thread.Sleep(2000);
             }
         }
 
@@ -383,7 +387,7 @@ namespace MyToDo.ViewModels
 
         private void CreateTaskBars()
         {
-            TaskBars.Add(new TaskBar() { Icon = "CardsHeart", Title = "心率:", Content = "--", Color = "#FFD6D6D6", Target = "bpm", Status = "沒有數據" });
+            TaskBars.Add(new TaskBar() { Icon = "CardsHeart", Title = "心率:", Content = "--", Color = "#FFD6D6D6", Target = "BPM", Status = "沒有數據" });
             TaskBars.Add(new TaskBar() { Icon = "LiquidSpot", Title = "血氧:", Content = "--", Color = "#FFD6D6D6", Target = "%", Status = "沒有數據" });
             TaskBars.Add(new TaskBar() { Icon = "Thermometer", Title = "體溫:", Content = "--", Color = "#FFD6D6D6", Target = "℃", Status = "沒有數據" });
         }
@@ -438,7 +442,6 @@ namespace MyToDo.ViewModels
             Date = $"{DateTime.Now.ToString("yyyy-MM-dd")}";
             WhichFactor = "bpm";
             Introducation = "心率（Heart rate）是指心臟收縮（contractions）跳動的頻率（beats）和每分鐘跳動的次數（bpm），正常人平靜時（安靜心率）每分鐘60到100次（60~100bpm(次/分鐘)），運動時心跳會加速，心肺功能較好的運動員會比正常人的心跳要慢。";
-
         }
 
         public SeriesCollection LastHourSeries { get; set; }//心率chart
@@ -607,18 +610,25 @@ namespace MyToDo.ViewModels
             {
                 TaskBars[0].Color = "#FFFA6D6D";//红色
                 TaskBars[0].Status = "當前心率過高";//红色
-                                              // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
-                                              //    new ToastContentBuilder()
-                                              //        .AddArgument("action", "viewConversation")
-                                              //        .AddArgument("conversationId", 9813)
-                                              //        .AddText("當前心率過高")
-                                              //        .AddText($"心率：{hr}")
-                                              //        .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
+                //Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前心率過高")
+                    .AddText($"心率：{hr}BPM")
+                    .Show(); // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 5, your TFM must be net5.0-windows10.0.17763.0 or greater
+
             }
             else if (hr > 120)
             {
                 TaskBars[0].Color = "#FFFAA25A";//黄色
                 TaskBars[0].Status = "當前心率略高";//黄色
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前心率略高")
+                    .AddText($"心率：{hr}BPM")
+                    .Show();
             }
             else if (hr > 60)
             {
@@ -629,6 +639,12 @@ namespace MyToDo.ViewModels
             {
                 TaskBars[0].Color = "#FFA9DEF4";//淡蓝色--过低
                 TaskBars[0].Status = "當前心率過低";//淡蓝色--过低
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前心率過低")
+                    .AddText($"心率：{hr}BPM")
+                    .Show();
             }
             #endregion
             #region 判断血氧
@@ -636,18 +652,29 @@ namespace MyToDo.ViewModels
             if (spo2 > 95)
             {
                 TaskBars[1].Color = "#FFD6D6D6";//正常灰色
-                TaskBars[1].Status = "當前血氧正常";//红色
-
+                TaskBars[1].Status = "當前血氧正常";//正常灰色
             }
             else if (spo2 > 90)
             {
                 TaskBars[1].Color = "#FFFAA25A";//黄色
                 TaskBars[1].Status = "當前血氧過低";//黄色
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前血氧過低")
+                    .AddText($"血氧濃度：{spo2}%")
+                    .Show();
             }
             else
             {
                 TaskBars[1].Color = "#FFFA6D6D";//红色
                 TaskBars[1].Status = "當前血氧危險";//红色
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前血氧危險")
+                    .AddText($"血氧濃度：{spo2}%")
+                    .Show();
             }
             #endregion
             #region 判断温度
@@ -656,12 +683,24 @@ namespace MyToDo.ViewModels
             {
                 TaskBars[2].Color = "#FFFA6D6D";//红色
                 TaskBars[2].Status = "當前體溫過高";//红色
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前體溫過高")
+                    .AddText($"體溫：{spo2}℃")
+                    .Show();
 
             }
             else if (temp > 37.2)
             {
                 TaskBars[2].Color = "#FFFAA25A";//黄色
                 TaskBars[2].Status = "當前體溫略高";//黄色
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前體溫略高")
+                    .AddText($"體溫：{spo2}℃")
+                    .Show();
             }
             else if (temp > 36.3)
             {
@@ -672,6 +711,12 @@ namespace MyToDo.ViewModels
             {
                 TaskBars[2].Color = "#FFA9DEF4";//淡蓝色--过低
                 TaskBars[2].Status = "當前體溫過低";//淡蓝色--过低
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("當前體溫過低")
+                    .AddText($"體溫：{spo2}℃")
+                    .Show();
             }
             #endregion
         }
@@ -834,7 +879,7 @@ namespace MyToDo.ViewModels
                                         if (Hand_temp > 10)
                                         {
                                             Hand_temp = 0.0086 * (Hand_temp - 28.3) + 36.58;
-                                            ps.hand_temp = (Hand_temp).ToString("0.00");
+                                            ps.hand_temp = (Hand_temp).ToString("0.0");
                                         }
                                         else
                                             ps.hand_temp = "--";
@@ -890,8 +935,13 @@ namespace MyToDo.ViewModels
                                 if (str[1] != "")
                                 {
                                     ps.spo2 = str[1];
+                                    if(double.Parse(ps.spo2) > 100)
+                                    {
+                                        ps.spo2 = "100.00";
+                                    }
                                     b_SPO2 = true;
                                     ps.hr = str[2];
+                                    ps.hr = ps.hr.Split('.')[0];
                                     HR = true;
                                 }
                                 else
@@ -973,7 +1023,7 @@ namespace MyToDo.ViewModels
                         if (b_SPO2 == true && HR == true && Temp == true)
                         {
                             //假数据部分开始
-                            ps.hr = "180";
+                            //ps.hr = "180";
                             //假数据部分结束
 
                             TaskBars[0].Content = ps.hr.ToString();

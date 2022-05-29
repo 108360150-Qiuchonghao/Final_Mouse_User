@@ -11,9 +11,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewmodels="clr-namespace:MyToDo.ViewModels"
-    Title="MainWindow"
+    Title="HealthCare"
     Width="1000"
     Height="700"
+    MinWidth="800"
+    MinHeight="630"
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -92,28 +94,28 @@
                             <materialDesign:PopupBox>
                                 <materialDesign:PopupBox.ToggleContent>
                                     <Image
-                                Width="30"
-                                Height="30"
-                                Source="/images/qch.png">
+                                        Width="30"
+                                        Height="30"
+                                        Source="/images/qch.png">
                                         <Image.Clip>
                                             <EllipseGeometry
-                                        Center="15,15"
-                                        RadiusX="15"
-                                        RadiusY="15" />
+                                                Center="15,15"
+                                                RadiusX="15"
+                                                RadiusY="15" />
                                         </Image.Clip>
                                     </Image>
                                 </materialDesign:PopupBox.ToggleContent>
                                 <StackPanel>
-                                    <Button Command="{Binding LoginoutCommand}" Content="返回主頁面"/>
+                                    <Button Command="{Binding LoginoutCommand}" Content="返回主頁面" />
                                 </StackPanel>
                             </materialDesign:PopupBox>
-                            
+
                             <Button
                                 x:Name="btnMin"
+                                Command="{Binding MainWindowHide}"
                                 Content="─"
                                 Cursor="Hand"
                                 FontSize="20"
-                                Command="{Binding MainWindowHide}"
                                 Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                             <Button
                                 x:Name="btnMax"
@@ -156,7 +158,7 @@
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
                                 Style="{StaticResource MaterialDesignToolButton}"
                                 ToolTip="Next Item" />
-                           
+
 
                             <TextBlock
                                 Margin="4"
@@ -169,17 +171,14 @@
                                 x:Name="minibtn"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Width="110"
-                                Height="35"
+                                Margin="20,0,0,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Command="{Binding MiniwindowCommand}"
                                 Content="縮小視窗"
-                                FontSize="20"
-                                Margin="20,0,0,0"
                                 Cursor="Hand"
-                                Style="{StaticResource MaterialDesignRaisedLightButton}" />
-
+                                FontSize="20"
+                                Style="{StaticResource MaterialDesignPaperLightButton}" />
                         </StackPanel>
                     </DockPanel>
                 </materialDesign:ColorZone>

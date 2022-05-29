@@ -54,7 +54,7 @@ namespace MyToDo.Views.Icon {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyToDo;component/views/icon/progressview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HealthCare;component/views/icon/progressview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\Icon\ProgressView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

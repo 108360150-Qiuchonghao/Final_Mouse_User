@@ -34,6 +34,14 @@ namespace MyToDo.ViewModels
         public string Title { get; set; }
 
         public event Action<IDialogResult> RequestClose;
+        private Boolean isIndeterminatear;
+
+        public Boolean IsIndeterminate
+        {
+            get { return isIndeterminatear; }
+            set { isIndeterminatear = value; RaisePropertyChanged(); }
+        }
+
 
         public bool CanCloseDialog()
         {
@@ -62,31 +70,56 @@ namespace MyToDo.ViewModels
                 case "LoginOut":
                     LoginOut();
                     break;
+                case "LoginWithout":
+                    LoginWithout();
+                    break;
             }
         }
         async void Login()
         {
-            string DeviceID = Properties.Settings.Default["DeviceID"].ToString();
-
-            var loginResult = await connectService.Connect(new ConnectionDto()
+            try
             {
-                MouseId = DeviceID
-            });
-
-            if(loginResult.Status==false)
+                string DeviceID = Properties.Settings.Default["DeviceID"].ToString();
+                IsIndeterminate = true;
+                var loginResult = await connectService.Connect(new ConnectionDto()
+                {
+                    MouseId = DeviceID
+                });
+                //IsIndeterminate = false;
+                if (loginResult != null && loginResult.Status == true)
+                {
+                    AppSession.IsConnected = true;
+                    AppSession.UserName = loginResult.Result.UserName;
+                    IsIndeterminate = false;
+                    RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+                }
+                else
+                {
+                    AppSession.IsConnected = false;
+                    AppSession.UserName = "現在是離線模式";
+                    IsIndeterminate = false;
+                    RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+                }
+            }
+            catch (Exception ex)
             {
                 AppSession.IsConnected = false;
                 AppSession.UserName = "現在是離線模式";
+                IsIndeterminate = false;
                 RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
             }
-            else if(loginResult.Status == true)
-            {
-                AppSession.IsConnected = true;
-                AppSession.UserName = loginResult.Result.UserName;
-                RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
-            }
+           
         }
 
+        void LoginWithout()
+        {
+            IsIndeterminate = true;
+            AppSession.IsConnected = false;
+            AppSession.UserName = "現在是離線模式";
+            IsIndeterminate = false;
+            RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+            IsIndeterminate = false;
+        }
         void LoginOut()
         {
             RequestClose?.Invoke(new DialogResult(ButtonResult.No));

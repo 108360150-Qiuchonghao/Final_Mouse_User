@@ -32,13 +32,12 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <TextBlock
-                        Margin="10"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="40"
-                        FontWeight="Bold"
-               
-                        Text="Welcome" />
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="40"
+                FontWeight="Bold"
+                Text="Welcome" />
             <Canvas ClipToBounds="True">
                 <Border
                     Canvas.Left="-168"
@@ -79,11 +78,33 @@
                         Height="50"
                         Command="{Binding ExecuteCommand}"
                         CommandParameter="Login"
-                        Content="進入UI"
+                        Content="Enable UI"
                         Cursor="Hand"
                         DockPanel.Dock="Top"
                         Foreground="White" />
+                    <TextBlock
+                        Margin="0,3,20,0"
+                        HorizontalAlignment="Right"
+                        Cursor="Hand"
+                        DockPanel.Dock="Top"
+                        FontWeight="Light"
+                        Text="Enable Without Login">
+                        <TextBlock.InputBindings>
+                            <MouseBinding
+                                Command="{Binding ExecuteCommand}"
+                                CommandParameter="LoginWithout"
+                                MouseAction="LeftClick" />
+                        </TextBlock.InputBindings>
+                    </TextBlock>
                     <DockPanel Margin="0,17" LastChildFill="False" />
+                    <ProgressBar
+                        Width="40"
+                        Height="40"
+                        Margin="20"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsIndeterminate="{Binding IsIndeterminate}"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}" />
                 </DockPanel>
             </md:TransitionerSlide>
         </md:Transitioner>

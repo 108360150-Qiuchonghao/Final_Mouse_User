@@ -72,7 +72,7 @@ namespace MyToDo.Views.Dialog {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyToDo;component/views/dialog/changedeviceidview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HealthCare;component/views/dialog/changedeviceidview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\Dialog\ChangeDeviceIDView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

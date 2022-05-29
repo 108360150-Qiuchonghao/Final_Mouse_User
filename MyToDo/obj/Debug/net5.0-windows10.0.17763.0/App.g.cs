@@ -66,7 +66,7 @@ namespace MyToDo {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyToDo;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HealthCare;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

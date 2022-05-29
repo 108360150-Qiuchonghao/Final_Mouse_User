@@ -189,7 +189,7 @@ namespace MyToDo.Views.TestViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyToDo;component/views/testviews/userdatatestview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/HealthCare;component/views/testviews/userdatatestview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\TestViews\UserDataTestView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
