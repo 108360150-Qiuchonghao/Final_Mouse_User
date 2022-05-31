@@ -31,7 +31,7 @@
         <SolidColorBrush Opacity="0.5" Color="White" />
     </UserControl.Background>
 
-    <Grid x:Name="MoveGrid" Margin="0,0,0,38">
+    <Grid x:Name="MoveGrid" Margin="3">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -194,6 +194,46 @@
                                 VerticalAlignment="Center"
                                 Kind="Thermometer" />
                             <TextBlock Margin="10" Text="{Binding TempData}" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+            <Border
+                Opacity="0.7"
+                Margin="5"
+                Background="#FFD6D6D6"
+                CornerRadius="7">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect
+                                            BlurRadius="10"
+                                            ShadowDepth="1"
+                                            Color="#DDDDDD" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Cursor" Value="Hand" />
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Margin="3"
+                                Width="23"
+                                Height="23"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Kind="HomeThermometerOutline" />
+                            <TextBlock Margin="10" Text="{Binding EnvTemp}" />
                         </StackPanel>
                     </Grid>
                 </Grid>

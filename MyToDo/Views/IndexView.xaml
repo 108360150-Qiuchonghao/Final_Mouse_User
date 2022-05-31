@@ -27,7 +27,7 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Width="auto"
-                Margin="10,10"
+                Margin="20,10,10,10"
                 FontSize="25"
                 FontWeight="bold"
                 Text="{Binding Title}" />
@@ -60,7 +60,7 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <materialDesign:PackIcon
-                        Margin="10"
+                        Margin="20,10,10,10"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Foreground="{Binding Icon1Color}"
@@ -200,7 +200,12 @@
                         FontSize="15"
                         Text="{Binding ConnectionStatus}" />
                 </StackPanel>
-
+                <TextBlock
+                    Margin="10,10,30,10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    Text="{Binding E_temp}" />
 
                 <materialDesign:Transitioner
                     Grid.Row="1"
@@ -254,7 +259,7 @@
                                 FontSize="18"
                                 Foreground="White"
                                 TextAlignment="Center">
-                                The Data Chart
+                                The Heart Rate Chart
                             </TextBlock>
                             <TextBlock
                                 Grid.Row="1"
@@ -280,7 +285,7 @@
                                 <TextBlock
                                     Margin="10"
                                     FontSize="13"
-                                    Text="{Binding Introducation}"
+                                    Text="心率（Heart rate）是指心臟收縮（contractions）跳動的頻率（beats）和每分鐘跳動的次數（bpm），正常人平靜時（安靜心率）每分鐘60到100次（60~100bpm(次/分鐘)），運動時心跳會加速，心肺功能較好的運動員會比正常人的心跳要慢。"
                                     TextWrapping="Wrap" />
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock
@@ -345,7 +350,7 @@
                                 FontSize="18"
                                 Foreground="White"
                                 TextAlignment="Center">
-                                The Data Chart
+                                The SPO2 Chart
                             </TextBlock>
                             <TextBlock
                                 Grid.Row="1"
@@ -371,7 +376,7 @@
                                 <TextBlock
                                     Margin="10"
                                     FontSize="13"
-                                    Text="{Binding Introducation}"
+                                    Text="血氧飽和度(Oxygen saturation)，或稱血氧濃度，是指血中氧飽和血紅蛋白相對於總血紅蛋白（不飽和+飽和）的比例。人體需要並調節血液中氧氣的非常精確和特定的平衡。人體的正常動脈血氧飽和度為95-100％，如果該水平低於90％，則被認為是低氧血症。"
                                     TextWrapping="Wrap" />
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock
@@ -436,7 +441,7 @@
                                 FontSize="18"
                                 Foreground="White"
                                 TextAlignment="Center">
-                                The Data Chart
+                                The Temperature Chart
                             </TextBlock>
                             <TextBlock
                                 Grid.Row="1"
@@ -462,7 +467,7 @@
                                 <TextBlock
                                     Margin="10"
                                     FontSize="13"
-                                    Text="{Binding Introducation}"
+                                    Text="體溫指生物的身體溫度。在正常情況下，人類體溫一般為37℃或者98.6℉。經口腔測量的體溫一般為36.8±0.7℃（98.2±1.3℉）。亦即攝氏36.1度至37.5度，或者華氏97.9度至99.5度。體溫反應了機體新陳代謝的結果，也是機體發揮各項正常功能的必備條件之一。"
                                     TextWrapping="Wrap" />
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock

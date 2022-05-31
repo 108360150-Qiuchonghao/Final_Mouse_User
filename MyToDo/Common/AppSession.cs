@@ -16,6 +16,7 @@ namespace MyToDo.Common
 
         public static string APPHR { get; set; }
         public static string APPTemp { get; set; }
+        public static string APPEnvTemp { get; set; }
         public static string APPSPO2 { get; set; }
         public static string APPMouseStatus { get; set; }
 

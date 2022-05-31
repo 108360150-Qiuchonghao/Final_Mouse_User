@@ -180,6 +180,14 @@ namespace MyToDo.ViewModels
             set { temp = value; RaisePropertyChanged(); }
         }
 
+        private string envtemp;
+
+        public string EnvTemp
+        {
+            get { return envtemp; }
+            set { envtemp = value; RaisePropertyChanged(); }
+        }
+
 
         private string mousestatus;
 
@@ -197,6 +205,7 @@ namespace MyToDo.ViewModels
             HRData = $"{AppSession.APPHR} BPM";
             SPO2Data = $"{AppSession.APPSPO2} %";
             TempData = $"{AppSession.APPTemp} ℃";
+            EnvTemp = $"{AppSession.APPEnvTemp} ℃";
             #region 原來的現在沒用
             //    //step1:监测是否连接到滑鼠
             //    MouseIsCon = ListenMouse();
@@ -330,6 +339,9 @@ namespace MyToDo.ViewModels
             get { return tempcolor; }
             set { tempcolor = value; RaisePropertyChanged(); }
         }
+
+
+
         private void Judgingdatastatus(string HR, string SPO2, string TEMP)
         {
             if (HR != "--" && SPO2 != "--" && TEMP != "--")

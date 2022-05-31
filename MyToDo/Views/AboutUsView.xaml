@@ -12,16 +12,150 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Orientation="Vertical">
             <TextBox
                 Grid.Row="0"
-                FontSize="16"
+                Margin="20"
+                FontSize="13"
                 IsReadOnly="True"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 Text="Github: https://github.com/108360150-Qiuchonghao/Final_Mouse_User" />
-        </StackPanel>
 
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="0,-50,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Width="50"
+                Height="50"
+                Margin="20"
+                Style="{StaticResource MaterialDesignFlatLightButton}"
+                Command="{Binding ChangePictures}"
+                CommandParameter="Left">
+                <materialDesign:PackIcon
+                    Width="60"
+                    Height="60"
+                    Margin="-20"
+                    Kind="ChevronLeft" 
+                    />
+            </Button>
+            <materialDesign:Transitioner Grid.Column="1" SelectedIndex="{Binding SelectIndex, FallbackValue=0}">
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="300"
+                    Height="300"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/1.jpeg" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="300"
+                    Height="300"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/2.jpeg" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="400"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/3.jpg" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="400"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/4.jpg" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="400"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/5.png" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="380"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/7.jpeg" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="400"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/8.jpeg" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="360"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/Algo1.png" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="350"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/Algo2.png" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <Image
+                    Width="400"
+                    Height="360"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Top"
+                    Source="/images/ProjecImages/Algo3.png" />
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
+            <Button
+                Grid.Column="2"
+                Width="50"
+                Height="50"
+                Margin="20"
+                Style="{StaticResource MaterialDesignFlatLightButton}"
+                Command="{Binding ChangePictures}"
+                CommandParameter="Right">
+                <materialDesign:PackIcon
+                    Width="60"
+                    Height="60"
+                    Margin="-20"
+                    Kind="ChevronRight" />
+            </Button>
+        </Grid>
+        <Border
+            Grid.RowSpan="4"
+            BorderBrush="#DDDDDD"
+            BorderThickness="2,0,0,2" />
     </Grid>
 </UserControl>

@@ -104,7 +104,7 @@ namespace MyToDo
 
             
             containerRegistry.RegisterForNavigation<SysSettingView, SysSettingViewModel>();
-            containerRegistry.RegisterForNavigation<AboutUsView, SysSettingViewModel>();
+            containerRegistry.RegisterForNavigation<AboutUsView, AboutUsViewModel>();
 
             containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>();
             containerRegistry.RegisterForNavigation<UserDataView, UserDataViewModel>();

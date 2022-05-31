@@ -22,8 +22,10 @@ namespace MyToDo.ViewModels
             Devicepidvid = Settings.Default["DeviceID"].ToString();
             PythonAddress = Settings.Default["PythoRoute"].ToString();
             IPAddress = Settings.Default["IPAddress"].ToString();
+            ToggleChecked = Convert.ToBoolean(Settings.Default["OpenNotify"].ToString());
             ShowAddCommand = new DelegateCommand<string>(ShowAdd);
             SelectRadio = new DelegateCommand(Select);
+            ToggleButtonClick = new DelegateCommand(ToggleClick);
             ChangeExitDialogShow = new DelegateCommand(changeExitDialogShow);
             choice = new ChoicesDto();
             choice.Choice = (bool)Properties.Settings.Default["ExitorHide"];
@@ -31,6 +33,15 @@ namespace MyToDo.ViewModels
             Exitdialogshow = (bool)Properties.Settings.Default["ExitDialogShow"];
             this.dialog = dialog;
         }
+
+        private bool toggleChecked;
+
+        public bool ToggleChecked
+        {
+            get { return toggleChecked; }
+            set { toggleChecked = value; RaisePropertyChanged(); }
+        }
+
 
         private string devicepidvid;
         public string Devicepidvid
@@ -61,6 +72,7 @@ namespace MyToDo.ViewModels
         }
         public DelegateCommand<string> ShowAddCommand { get; private set; }
         public DelegateCommand ChangeExitDialogShow { get; private set; }
+        public DelegateCommand ToggleButtonClick { get; private set; }
         public DelegateCommand SelectRadio { get; set; }
         private readonly IDialogHostService dialog;
 
@@ -71,6 +83,11 @@ namespace MyToDo.ViewModels
             dialog.ShowDialog("ChangeDeviceIDView", keys, DialogCallback);
         }
 
+        private void ToggleClick()
+        {
+            Properties.Settings.Default["OpenNotify"] = ToggleChecked;
+            Properties.Settings.Default.Save();
+        }
         private void DialogCallback(IDialogResult result)
         {
             ButtonResult result1 = result.Result;

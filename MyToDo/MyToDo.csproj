@@ -25,10 +25,24 @@
     <None Remove="Images\icon\heart.ico" />
     <None Remove="Images\icon\LAB.ico" />
     <None Remove="Images\icon\labicon.ico" />
+    <None Remove="Images\ProjecImages\1.jpeg" />
+    <None Remove="Images\ProjecImages\2.jpeg" />
+    <None Remove="Images\ProjecImages\3.jpg" />
+    <None Remove="Images\ProjecImages\4.jpg" />
+    <None Remove="Images\ProjecImages\5.png" />
+    <None Remove="Images\ProjecImages\7.jpeg" />
+    <None Remove="Images\ProjecImages\8.jpeg" />
+    <None Remove="Images\ProjecImages\Algo1.png" />
+    <None Remove="Images\ProjecImages\Algo2.png" />
+    <None Remove="Images\ProjecImages\Algo3.png" />
     <None Remove="Images\qch.png" />
     <None Remove="Images\qch1.png" />
     <None Remove="Images\qch2.png" />
     <None Remove="Images\user1.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\ProjecImages\5.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,6 +76,15 @@
 
   <ItemGroup>
     <Resource Include="Images\icon\labicon.ico" />
+    <Resource Include="Images\ProjecImages\1.jpeg" />
+    <Resource Include="Images\ProjecImages\2.jpeg" />
+    <Resource Include="Images\ProjecImages\3.jpg" />
+    <Resource Include="Images\ProjecImages\4.jpg" />
+    <Resource Include="Images\ProjecImages\7.jpeg" />
+    <Resource Include="Images\ProjecImages\8.jpeg" />
+    <Resource Include="Images\ProjecImages\Algo1.png" />
+    <Resource Include="Images\ProjecImages\Algo2.png" />
+    <Resource Include="Images\ProjecImages\Algo3.png" />
     <Resource Include="Images\qch.png" />
     <Resource Include="Images\qch1.png" />
     <Resource Include="Images\qch2.png">
